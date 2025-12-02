@@ -1,0 +1,34 @@
+{
+    "games": [
+        {
+            "ID": 1,
+            "player_ID": 1,
+            "start_airport": "EFHK",
+            "end_airport": "EGAT",
+            "player_airport": "EFHK",
+            "is_over": 0,
+            "co2_consumed": 250,
+            "points": 150
+        },
+        {
+            "ID": 2,
+            "player_ID": 1,
+            "start_airport": "ABCD",
+            "end_airport": "EGAT",
+            "player_airport": "EFHK",
+            "is_over": 1,
+            "co2_consumed": 250,
+            "points": 150
+        },
+        {
+            "ID": 3,
+            "player_ID": 1,
+            "start_airport": "ABCD",
+            "end_airport": "EGAT",
+            "player_airport": "EFHK",
+            "is_over": 0,
+            "co2_consumed": 250,
+            "points": 150
+        }
+    ]
+}

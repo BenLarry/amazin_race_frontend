@@ -1,0 +1,23 @@
+{
+    "question_ID": 100,
+    "question": "Mikä on Tanskan pääkaupunki?",
+    "points": "50",
+    "level": 1,
+    "answers": [
+        {
+            "answer_ID": 1,
+            "answer": "Helsinki",
+            "is_correct": 0
+        },
+        {
+            "answer_ID": 2,
+            "answer": "Kööpenhamina",
+            "is_correct": 1
+        },
+        {
+            "answer_ID": 3,
+            "answer": "Lontoo",
+            "is_correct": 0
+        }
+    ]
+}
