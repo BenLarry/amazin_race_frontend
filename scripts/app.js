@@ -1,9 +1,14 @@
-const window = document.querySelector('#window');
+const mainWindow = document.querySelector('#window');
+const loginForm = document.querySelector('#login');
 
-// CHECK LOCAL STORAGE IF PLAYER LOGGED IN
-
-const login = document.querySelector('#login');
-const createAccount = document.querySelector('#create-account');
+function checkIfUserLoggedIn() {
+  const username = localStorage.getItem('username');
+  const usernameID = localStorage.getItem('usernameID');
+  if (username === null || usernameID === null) {
+    return false;
+  }
+  return true;
+}
 
 async function accountLogin(event) {
   event.preventDefault();
@@ -11,26 +16,31 @@ async function accountLogin(event) {
   if (name.value.includes('#')) {
     [username, id] = name.value.split('#');
     console.log(username, id);
-    try {
+    localStorage.setItem('username', username);
+    localStorage.setItem('usernameID', id);
+
+    loginForm.removeEventListener('submit', accountLogin);
+
+    //remove login form and render gamewindow
+
+    /*try {
       const response = await fetch('127.0.0.1:3000');
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
-    } catch (error) {}
+    } catch (error) {}*/
+  } else {
+    console.log('Invalid usernameform');
   }
-  // check if name is in correct format and if not return error message in window
-  // if correct format fetch to server if user exist
-  // if user exist object len is not 0
-  // set localstorage player id
 }
 
-async function createAccountLogin(name) {
-  //remove eventlistener to login
-  //limit how short and long name can be
-  //create player and return name#id for player so he can use it in future
-  // set localstorage player id
+let isUserLoggedIn = checkIfUserLoggedIn();
+
+if (isUserLoggedIn) {
+  loginForm.close();
+  // IF USER IS LOGGED IN RENDER GAME WINDOW
+} else {
+  loginForm.show();
 }
 
-login.addEventListener('submit', accountLogin);
-
-createAccount.addEventListener('click', createAccountLogin);
+loginForm.addEventListener('submit', accountLogin);
