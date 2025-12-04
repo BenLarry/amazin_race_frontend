@@ -1,0 +1,4 @@
+html
+<input type="text" placeholder="username#id" id="login-username">
+
+<input type="submit" value="Login">

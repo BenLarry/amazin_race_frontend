@@ -20,6 +20,10 @@ nav {
     margin-top: 5rem;
 }
 
+dialog {
+    all: unset;
+}
+
 p {
   font-family: "Sixtyfour Convergence", sans-serif;
   font-optical-sizing: auto;
@@ -57,7 +61,7 @@ article:hover {
 background: rgba(0, 0, 0, 0.9);
 }
 
-a {
+form {
     color: lightblue;
     border: 4px solid gray;
     padding: 1rem;
@@ -69,7 +73,7 @@ a {
     font-size: 30px;
 }
 
-a:hover {
+form:hover {
   background-color: gray;
 }
 
@@ -80,20 +84,16 @@ a:hover {
     margin-right: 15rem;
     margin-top: 3rem;
     align-items: center;
-    border: 4px solid gray;
-    border-radius: 8px;
     flex-wrap: wrap;
 }
 
 .news {
-    border: 4px solid gray;
     height: 100%;
     display: flex;
     justify-content: right;
     margin-left: 15rem;
     margin-top: 3rem;
     align-items: center;
-    border-radius: 8px;
     flex-wrap: wrap;
 
 .uutinen {
@@ -142,6 +142,8 @@ li {
    padding: 1rem 3rem 1rem 3rem;
    items-align: center;
    justify-content: space-evenly;
+   border: 4px solid gray;
+   border-radius: 35px;
 }
 .hs_section:hover {
 background: rgba(0, 0, 0, 0.9);
@@ -163,6 +165,8 @@ background: rgba(0, 0, 0, 0.9);
   padding: 1rem 3rem 1rem 3rem;
   items-align: center;
   justify-content: space-evenly;
+  border: 4px solid gray;
+  border-radius: 35px;
 }
 
 .news_section:hover {
