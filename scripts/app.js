@@ -1,3 +1,7 @@
+const window = document.querySelector('#window');
+
+// CHECK LOCAL STORAGE IF PLAYER LOGGED IN
+
 const login = document.querySelector('#login');
 const createAccount = document.querySelector('#create-account');
 
