@@ -3,49 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <title>Amazin Race</title>
     <script src="scripts/app.js" defer></script>
+    <link href="styles/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sixtyfour+Convergence:SCAN,XELA,YELA@-13,48,50&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Workbench:BLED,SCAN@7,-15&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <nav>
-        <p>Navigation</p>
-    </nav>
-    <dialog id="login">
-        <form id="login">
-            <input type="text" placeholder="username#id" id="login-username">
-            <input type="submit" value="Login">
-        </form>
-        <a id="create-account-link" href="#">Create Account</a>
+    <h1>The Amazin' Race</h1>
+    <main>
+        <section id="highscore">
+            <h2>Pistetaulukko</h2>
+            <ol id="highscore-list">
+                <!-- fetch javascript highscore-->
+            </ol>
+        </section>
+        <section id="login-form">
+            <div id="login">Kirjaudu Sisään</div>
+            <div id="create-account">Luo Käyttäjä</div>
+        </section>
+        <section id="news-section">
+            <h1>Uutiset</h1>
+            <ul>
+                <li class="news">Tänään on hieno sää</li>
+                <li class="news">Huomenna on hieno sää</li>
+                <li class="news">Tiistaina on hieno sää</li>
+            </ul>
+        </section>
+    </main>
+    <dialog id="game-menu">
+
     </dialog>
-    <dialog id="create-account">
-        <form id="create-account-form">
-            <input type="text" placeholder="username#id" id="create-username">
-            <input type="submit" value="Create">
-        </form>
-    </dialog>
-    <dialog id="game-menu-window">
-        <div id="highscore">
-            <h2>highscores</h2>
-            <h2>personal best</h2>
-        </div>
-        <div id="ongoing-games">
-            <h2>New game</h2>
-            <h2>On going games</h2>
-        </div>
-    </dialog>
-    <dialog id="game-window">
-        <nav>
-            <h2>game nav bar</h2>
-        </nav>
-        <div id="map">
-            <h2>map</h2>
-        </div>
-        <div>
-            <h2>game questions</h2>
-        </div>
-    </dialog>
-    <dialog id="game-end-window">
-        <h2></h2>
+    <dialog id="game">
+
     </dialog>
 </body>
 </html>
