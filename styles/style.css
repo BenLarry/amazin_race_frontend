@@ -110,7 +110,7 @@ body {
 }
 
 /* muokkaa */
-.login-menu {
+.login-menu[open] {
     position: fixed;
     display: flex;
     justify-content: center;
@@ -118,6 +118,10 @@ body {
     background-color: blue;
     width: 25%;
     height: 25%;
+}
+
+.hide-element {
+    opacity: 0;
 }
 
 /*

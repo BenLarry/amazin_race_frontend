@@ -4,6 +4,10 @@ const loginButton = document.querySelector('#login-btn');
 const createAccountButton = document.querySelector('#create-account-btn');
 const loginDialog = document.querySelector('#login');
 const createAccountDialog = document.querySelector('#create-account');
+const errorMessage = document.querySelector('#error-message');
+const gameMenuDialog = document.querySelector('#game-menu');
+const gameDialog = document.querySelector('#game');
+const loginMenu = document.querySelector('#login-menu');
 
 async function fetchHighscoreList() {
   try {
@@ -35,12 +39,14 @@ fillHighscoreList();
 
 function loginClick(event) {
   event.preventDefault();
+  loginMenu.classList.add('hide-element');
   console.log('login button clicked');
   loginDialog.showModal();
 }
 
 function createAccountClick(event) {
   event.preventDefault();
+  loginMenu.classList.add('hide-element');
   console.log('Create account button clicked');
   createAccountDialog.showModal();
 }
@@ -49,23 +55,62 @@ async function login(event) {
   event.preventDefault();
   console.log('Login submit clicked');
 
-  const username = document.querySelector('#username-login').value;
-  if (!username.includes('#')) {
+  const usernameInput = document.querySelector('#username-login').value;
+  if (!usernameInput.includes('#')) {
+    return (errorMessage.innerText = 'Invalid username format, username#ID');
   }
-  const x = 'perk';
-  const y = 72;
+
+  const [username, ID] = usernameInput.split('#');
   try {
-    const response = fetch(
-      `http://127.0.0.1:3000/login?name=${x}&player_ID=${y}`
+    const response = await fetch(
+      `http://127.0.0.1:3000/login?name=${username}&player_ID=${ID}`
     );
-  } catch (error) {}
+
+    if (!response.ok) {
+      throw new Error('Could not login');
+    }
+
+    const result = await response.json();
+    console.log(result);
+    if (!Object.keys(result).length) {
+      console.log('user does not exist');
+      return (errorMessage.innerText = 'user does not exist');
+    }
+
+    localStorage.setItem('username', result.name);
+    localStorage.setItem('ID', result.ID);
+    loginDialog.close();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function createAccount(event) {
   event.preventDefault();
   console.log('Create account submit clicked');
+  const usernameInput = document.querySelector(
+    '#username-create-account'
+  ).value;
+  console.log(usernameInput);
   try {
-  } catch (error) {}
+    const response = await fetch(
+      `http://127.0.0.1:3000/login?name=${usernameInput}`,
+      {
+        method: 'POST',
+      }
+    );
+
+    if (!response.ok) {
+      return (errorMessage.innerText = 'Could not create account');
+    }
+
+    const result = await response.json();
+    localStorage.setItem('username', result.name);
+    localStorage.setItem('ID', result.ID);
+    createAccountDialog.close();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 loginButton.addEventListener('click', loginClick);
