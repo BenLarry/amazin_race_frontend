@@ -199,9 +199,9 @@ body {
     align-items: center;
     flex-direction: column;
     width: 25%;
-    height: 27.25rem;
+    height: 50%;
     margin-left: 37.25%;
-    margin-top: 18.5rem;
+    margin-top: 17rem;
     border: 4px solid gray;
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.7);
@@ -214,16 +214,15 @@ body {
     justify-content: center;
     align-items: center;
     border: 2px solid grey;
+    border-radius: 1px 1px 8px 8px;
     width: 100%;
     height: 20%;
 }
 
 #new-game:hover {
-    background-color: blueviolet;
-    border: 2px solid gray;
-    border-radius: 8px;
-
-
+    background-color: dimgray;
+    border: 2px solid dimgray;
+    border-radius: 1px 1px 8px 8px;
 }
 
 #Uus {
@@ -234,13 +233,13 @@ body {
 }
 
 #Pelin-jatke {
-    margin-top: 8rem;
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    margin-top: 5rem;
 }
 
-#pj {
+#pj-title {
     margin-left: 35%;
 
 }
@@ -254,17 +253,106 @@ body {
 
 }
 
-.peli-kerta {
+li {
     border: 2px solid grey;
     width: 100%;
     box-sizing: border-box;
-    padding: 1rem;
+    padding: 0.5rem;
+    list-style-type: none;
 }
 
-.peli-kerta:hover {
+li:hover {
     background: rgba(0, 0, 0, 0.9);
     border: 2px solid gray;
 }
+
+.logout {
+    position: absolute;
+    bottom: 0;
+}
+
+.logout-btn {
+    border: 2px solid grey;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 0.25rem;
+}
+
+.logout-btn:hover {
+    background-color: dimgray;
+    border: 2px solid dimgrey;
+}
+
+#game {
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 100vw;
+
+}
+
+#Stats {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: silver;
+}
+
+.statsi {
+    display: inline-block;
+    text-align: center;
+    border: 4px solid grey;
+    padding: 1.5rem 3.65rem 1rem 3.65rem;
+    height: 5rem;
+}
+
+#question {
+    position: absolute;
+    right: 0;
+    height: 75%;
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid gray;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    background: rgba(0, 0, 0, 0.3);
+    margin-right: 2.5rem;
+    margin-top: 4rem;
+}
+
+#question-text {
+    position: absolute;
+    top: 0;
+    margin-top: 2rem;
+}
+
+#Answers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-top: 4rem;
+
+}
+
+.answer {
+    border: 2px solid dimgrey;
+    border-radius: 5rem / 20px;
+    padding: 2rem 7rem 2rem 7rem;
+    margin: 2rem;
+    background-color: dimgray;
+}
+
+.answer:hover {
+    background-color: gray;
+
+}
+
+#map {
+    height: 500px;
+    width: 500px;
+}
+
 
 /*
 nav {
