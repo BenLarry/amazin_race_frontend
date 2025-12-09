@@ -208,7 +208,7 @@ body {
     color: lightblue;
 }
 
-#Uusi-peli {
+#new-game {
     position: absolute;
     top: 0;
     justify-content: center;
@@ -218,7 +218,7 @@ body {
     height: 20%;
 }
 
-#Uusi-peli:hover {
+#new-game:hover {
     background-color: blueviolet;
     border: 2px solid gray;
     border-radius: 8px;
@@ -245,7 +245,7 @@ body {
 
 }
 
-#peli-lista {
+#game-list {
     display: grid;
     flex-wrap: wrap;
     margin-top: 1rem;

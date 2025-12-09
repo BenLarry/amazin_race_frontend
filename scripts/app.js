@@ -13,6 +13,8 @@ const gameDialog = document.querySelector('#game');
 const loginMenu = document.querySelector('#login-menu');
 const exitButtons = Array.from(document.querySelectorAll('.exit-button'));
 const logoutButton = document.querySelector('.logout-btn');
+const newGameButton = document.querySelector('#new-game');
+const gameList = document.querySelector('#game-list');
 
 async function fetchHighscoreList() {
   try {
@@ -37,34 +39,6 @@ async function fillHighscoreList() {
     li.innerText = `${i + 1} ${players[i].name} ${players[i].top_points}`;
     highscore.append(li);
   }
-}
-
-fillHighscoreList();
-
-function loginClick(event) {
-  event.preventDefault();
-  loginMenu.classList.add('hide-element');
-  console.log('login button clicked');
-  loginDialog.showModal();
-}
-
-function createAccountClick(event) {
-  event.preventDefault();
-  loginMenu.classList.add('hide-element');
-  console.log('Create account button clicked');
-  createAccountDialog.showModal();
-}
-
-function handleLoginMenu(event) {
-  event.target.parentNode.close();
-  loginMenu.classList.remove('hide-element');
-}
-
-function logout(event) {
-  console.log('clicked logout');
-  localStorage.clear();
-  gameMenuDialog.close();
-  loginMenu.classList.remove('hide-element');
 }
 
 async function login(event) {
@@ -96,6 +70,9 @@ async function login(event) {
 
     localStorage.setItem('username', result.name);
     localStorage.setItem('ID', result.ID);
+
+    await fillOldGameList();
+
     loginDialog.close();
     gameMenuDialog.showModal();
   } catch (error) {
@@ -128,12 +105,97 @@ async function createAccount(event) {
     const result = await response.json();
     localStorage.setItem('username', result.name);
     localStorage.setItem('ID', result.ID);
+
+    await fillOldGameList();
+
     createAccountDialog.close();
     gameMenuDialog.showModal();
   } catch (error) {
     console.log(error);
     return (errorMessageCreateAccount.innerText = 'Could not create account');
   }
+}
+
+async function createNewGame() {
+  //if local strogra empty logout
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/game?player_ID=${localStorage.getItem('ID')}`,
+      {
+        method: 'POST',
+      }
+    );
+
+    if (!response.ok) {
+      console.log('couldnt create game');
+      return;
+    }
+
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function fetchOldGames() {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/game?player_ID=${localStorage.getItem('ID')}`
+    );
+
+    if (!response.ok) {
+      console.log('copuldnt fetch old on going games');
+      return;
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function fillOldGameList() {
+  const oldGames = await fetchOldGames();
+
+  for (let i = 0; i < oldGames.length; i++) {
+    const li = document.createElement('li');
+    li.innerText = `${i + 1} Peli player ID ${localStorage.getItem('ID')}`;
+    gameList.append(li);
+  }
+}
+
+fillHighscoreList();
+
+function loginClick(event) {
+  event.preventDefault();
+  loginMenu.classList.add('hide-element');
+  console.log('login button clicked');
+  loginDialog.showModal();
+}
+
+function createAccountClick(event) {
+  event.preventDefault();
+  loginMenu.classList.add('hide-element');
+  console.log('Create account button clicked');
+  createAccountDialog.showModal();
+}
+
+function handleLoginMenu(event) {
+  event.target.parentNode.close();
+  loginMenu.classList.remove('hide-element');
+}
+
+function logout(event) {
+  console.log('clicked logout');
+  localStorage.clear();
+  clearOldGames();
+  gameMenuDialog.close();
+  loginMenu.classList.remove('hide-element');
+}
+
+function clearOldGames() {
+  gameList.innerHTML = '';
 }
 
 loginButton.addEventListener('click', loginClick);
@@ -147,3 +209,4 @@ for (const exitButton of exitButtons) {
 }
 
 logoutButton.addEventListener('click', logout);
+newGameButton.addEventListener('click', createNewGame);
