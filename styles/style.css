@@ -5,8 +5,11 @@
 
 }
 
-body, html {
+body {
     background-image: url("/images/worldmap.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     font-family: "Workbench", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
@@ -27,7 +30,7 @@ body, html {
     "XELA" 48,
     "YELA" 50;
     font-size: 50px;
-    padding-top: 5rem;
+    padding-top: 2.5rem;
     text-align: center;
 }
 
@@ -38,7 +41,7 @@ body, html {
 }
 
 .section-container {
-    height: 49rem;
+    height: 75%;
     width: 25%;
     display: flex;
     justify-content: center;
@@ -111,21 +114,6 @@ body, html {
 
 /* muokkaa */
 .login-menu[open] {
-<<<<<<< HEAD
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    background-color: blue;
-    width: 25%;
-    height: 25%;
-}
-
-.hide-element {
-    opacity: 0;
-}
-
-=======
     display: flex;
     justify-content: center;
     align-items: center;
@@ -187,7 +175,7 @@ body, html {
     border-radius: 8px
 }
 
-span {
+.exit-button {
     display: block;
     position: absolute;
     right: 0;
@@ -197,7 +185,11 @@ span {
     color: white;
     font-size: 1.5rem;
 }
->>>>>>> 087a357442fca9262f3c0733012ef6b1c8858288
+
+#error-message {
+    color: white;
+}
+
 /*
 nav {
     width: 100%;
