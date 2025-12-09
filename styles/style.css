@@ -199,9 +199,9 @@ body {
     align-items: center;
     flex-direction: column;
     width: 25%;
-    height: 27.25rem;
+    height: 50%;
     margin-left: 37.25%;
-    margin-top: 18.5rem;
+    margin-top: 17rem;
     border: 4px solid gray;
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.7);
@@ -214,16 +214,15 @@ body {
     justify-content: center;
     align-items: center;
     border: 2px solid grey;
+    border-radius: 1px 1px 8px 8px;
     width: 100%;
     height: 20%;
 }
 
 #new-game:hover {
-    background-color: blueviolet;
-    border: 2px solid gray;
-    border-radius: 8px;
-
-
+    background-color: dimgray;
+    border: 2px solid dimgray;
+    border-radius: 1px 1px 8px 8px;
 }
 
 #Uus {
@@ -234,10 +233,10 @@ body {
 }
 
 #Pelin-jatke {
-    margin-top: 8rem;
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    margin-top: 5rem;
 }
 
 #pj {
@@ -254,16 +253,33 @@ body {
 
 }
 
-.peli-kerta {
+li {
     border: 2px solid grey;
     width: 100%;
     box-sizing: border-box;
-    padding: 1rem;
+    padding: 0.5rem;
+
 }
 
-.peli-kerta:hover {
+li:hover {
     background: rgba(0, 0, 0, 0.9);
     border: 2px solid gray;
+}
+
+.logout {
+    position: absolute;
+    bottom: 0;
+}
+
+.logout-btn {
+    border: 2px solid grey;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.logout-btn:hover {
+    background-color: dimgray;
+    border: 2px solid dimgrey;
 }
 
 /*
