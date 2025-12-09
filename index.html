@@ -12,6 +12,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Workbench:BLED,SCAN@7,-15&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
 
 </head>
 <body>
@@ -57,7 +63,7 @@
                <h2 id="Uus">Uusi peli</h2>
            </div>
            <div id="Pelin-jatke">
-               <h2 id="pj">Pelin jatke</h2>
+               <h2 id="pj-title">Pelin jatke</h2>
                <ul id="game-list">
                    <!-- fetch players games-->
                </ul>
@@ -67,15 +73,18 @@
            </div>
     </dialog>
     <dialog id="game">
-        <nav id="Stats">
-            <h2 class="statsi">Pelaajan nimi: </h2>
-            <h2 class="statsi">Pisteet: </h2>
-            <h2 class="statsi">CO2 päästöt: </h2>
-            <h2 class="statsi">Lopetus lentokenttä: </h2>
+        <nav >
+            <ul id="Stats">
+                <li class="statsi">Pelaajan nimi: </li>
+                <li class="statsi">Pisteet: </li>
+                <li class="statsi">CO2 päästöt: </li>
+                <li class="statsi">Lopetus lentokenttä: </li>
+                <li class="statsi">Logout</li>
+            </ul>
         </nav>
         <div id="container">
-            <section id="map">
-
+            <section id="map-section">
+                 <div id="map"></div>
             </section>
             <section id="question">
                 <h2 id="question-text">Mikä on Suomen pääkaupunki</h2>

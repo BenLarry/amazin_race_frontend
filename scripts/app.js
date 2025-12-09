@@ -161,12 +161,11 @@ async function fillOldGameList() {
 
   for (let i = 0; i < oldGames.length; i++) {
     const li = document.createElement('li');
+    li.classList.add('list-item');
     li.innerText = `${i + 1} Peli player ID ${localStorage.getItem('ID')}`;
     gameList.append(li);
   }
 }
-
-fillHighscoreList();
 
 function loginClick(event) {
   event.preventDefault();
@@ -199,6 +198,24 @@ function clearOldGames() {
   gameList.innerHTML = '';
 }
 
+function isLoggedIn() {
+  let username = localStorage.getItem('username');
+  let ID = localStorage.getItem('ID');
+
+  if (username && ID) {
+    fillOldGameList();
+    loginMenu.classList.add('hide-element');
+    gameMenuDialog.showModal();
+  }
+}
+
+const map = L.map('map', { tap: false });
+L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+  maxZoom: 20,
+  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+}).addTo(map);
+map.setView([60, 24], 7);
+
 loginButton.addEventListener('click', loginClick);
 createAccountButton.addEventListener('click', createAccountClick);
 
@@ -212,4 +229,6 @@ for (const exitButton of exitButtons) {
 logoutButton.addEventListener('click', logout);
 newGameButton.addEventListener('click', createNewGame);
 
-gameDialog.showModal()
+gameDialog.showModal();
+fillHighscoreList();
+isLoggedIn();
