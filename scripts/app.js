@@ -211,3 +211,5 @@ for (const exitButton of exitButtons) {
 
 logoutButton.addEventListener('click', logout);
 newGameButton.addEventListener('click', createNewGame);
+
+gameDialog.showModal()
