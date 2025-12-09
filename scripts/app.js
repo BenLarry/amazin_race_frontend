@@ -4,10 +4,15 @@ const loginButton = document.querySelector('#login-btn');
 const createAccountButton = document.querySelector('#create-account-btn');
 const loginDialog = document.querySelector('#login');
 const createAccountDialog = document.querySelector('#create-account');
-const errorMessage = document.querySelector('#error-message');
+const errorMessageLogin = document.querySelector('#error-message-login');
+const errorMessageCreateAccount = document.querySelector(
+  '#error-message-create-account'
+);
 const gameMenuDialog = document.querySelector('#game-menu');
 const gameDialog = document.querySelector('#game');
 const loginMenu = document.querySelector('#login-menu');
+const exitButtons = Array.from(document.querySelectorAll('.exit-button'));
+const logoutButton = document.querySelector('.logout-btn');
 
 async function fetchHighscoreList() {
   try {
@@ -17,7 +22,6 @@ async function fetchHighscoreList() {
       throw new Error('could not fetch highscore list');
     }
     const result = await response.json();
-    console.log(result);
     return result;
   } catch (error) {
     console.log(error);
@@ -28,7 +32,6 @@ async function fillHighscoreList() {
   const highscore = document.querySelector('#highscore-list');
   const players = await fetchHighscoreList();
   for (let i = 0; i < players.length; i++) {
-    console.log(players[i]);
     const li = document.createElement('li');
     li.classList.add('list-item');
     li.innerText = `${i + 1} ${players[i].name} ${players[i].top_points}`;
@@ -52,13 +55,26 @@ function createAccountClick(event) {
   createAccountDialog.showModal();
 }
 
+function handleLoginMenu(event) {
+  event.target.parentNode.close();
+  loginMenu.classList.remove('hide-element');
+}
+
+function logout(event) {
+  console.log('clicked logout');
+  localStorage.clear();
+  gameMenuDialog.close();
+  loginMenu.classList.remove('hide-element');
+}
+
 async function login(event) {
   event.preventDefault();
   console.log('Login submit clicked');
 
   const usernameInput = document.querySelector('#username-login').value;
   if (!usernameInput.includes('#')) {
-    return (errorMessage.innerText = 'Invalid username format, username#ID');
+    return (errorMessageLogin.innerText =
+      'Invalid username format, username#ID');
   }
 
   const [username, ID] = usernameInput.split('#');
@@ -75,42 +91,48 @@ async function login(event) {
     console.log(result);
     if (!Object.keys(result).length) {
       console.log('user does not exist');
-      return (errorMessage.innerText = 'user does not exist');
+      return (errorMessageLogin.innerText = 'user does not exist');
     }
 
     localStorage.setItem('username', result.name);
     localStorage.setItem('ID', result.ID);
     loginDialog.close();
+    gameMenuDialog.showModal();
   } catch (error) {
     console.log(error);
+    return (errorMessageLogin.innerText = 'Could not login');
   }
 }
 
 async function createAccount(event) {
   event.preventDefault();
   console.log('Create account submit clicked');
-  const usernameInput = document.querySelector(
-    '#username-create-account'
-  ).value;
-  console.log(usernameInput);
+  const usernameInput = document.querySelector('#username-create-account');
+  if (!usernameInput.value) {
+    console.log('here');
+    return (errorMessageCreateAccount.innerText =
+      'Please enter valid username');
+  }
   try {
     const response = await fetch(
-      `http://127.0.0.1:3000/login?name=${usernameInput}`,
+      `http://127.0.0.1:3000/login?name=${usernameInput.value}`,
       {
         method: 'POST',
       }
     );
 
     if (!response.ok) {
-      return (errorMessage.innerText = 'Could not create account');
+      return (errorMessageCreateAccount.innerText = 'Could not create account');
     }
 
     const result = await response.json();
     localStorage.setItem('username', result.name);
     localStorage.setItem('ID', result.ID);
     createAccountDialog.close();
+    gameMenuDialog.showModal();
   } catch (error) {
     console.log(error);
+    return (errorMessageCreateAccount.innerText = 'Could not create account');
   }
 }
 
@@ -119,3 +141,9 @@ createAccountButton.addEventListener('click', createAccountClick);
 
 loginDialog.addEventListener('submit', login);
 createAccountDialog.addEventListener('submit', createAccount);
+
+for (const exitButton of exitButtons) {
+  exitButton.addEventListener('click', handleLoginMenu);
+}
+
+logoutButton.addEventListener('click', logout);

@@ -42,18 +42,35 @@
             <input type="text" name="username" class="login-dialog" id="username-login" placeholder="username#123">
             <input type="submit" value="Kirjaudu" class="menu">
         </form>
-        <span id="error-message"></span>
+        <span id="error-message-login" class="error-message"></span>
     </dialog>
     <dialog id="create-account" class="login-menu">
         <span class="exit-button">&#x2715;</span>
         <form id="create-account-form" class="menu-form">
-            <input type="text" name="username" class="login-dialog" placeholder="username">
+            <input type="text" name="username" class="login-dialog" placeholder="username" id="username-create-account">
             <input type="submit" value="Luo Käyttäjä" class="menu">
         </form>
-        <span></span>
+        <span id="error-message-create-account" class="error-message"></span>
     </dialog>
     <dialog id="game-menu">
-
+           <div id="Uusi-peli">
+               <h2 id="Uus">
+                   Uusi peli
+               </h2>
+           </div>
+           <div id="Pelin-jatke">
+               <h2 id="pj">Pelin jatke</h2>
+               <ul id="peli-lista">
+                   <li class="peli-kerta">Peli 1</li>
+                   <li class="peli-kerta">Peli 2</li>
+                   <li class="peli-kerta">Peli 3</li>
+                   <li class="peli-kerta">Peli 4</li>
+                   <li class="peli-kerta">Peli 5</li>
+               </ul>
+           </div>
+           <div class="logout">
+                <div class="logout-btn">Kirjaudu ulos</div>
+           </div>
     </dialog>
     <dialog id="game">
 
