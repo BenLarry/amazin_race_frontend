@@ -20,15 +20,12 @@
         <section id="highscore" class="section-container">
             <h2 class="heading">Pistetaulukko</h2>
             <ul id="highscore-list" class="list">
-                <li class="list-item">Miio 1000p</li>
-                <li class="list-item">Karim 1000p</li>
-                <li class="list-item">Nikolas 1000p</li>
                 <!-- fetch javascript highscore-->
             </ul>
         </section>
-        <section id="login-form">
-            <div id="login" class="login-buttons">Kirjaudu Sisään</div>
-            <div id="create-account" class="login-buttons">Luo Käyttäjä</div>
+        <section id="login-menu">
+            <div id="login-btn" class="login-buttons">Kirjaudu Sisään</div>
+            <div id="create-account-btn" class="login-buttons">Luo Käyttäjä</div>
         </section>
         <section id="news-section" class="section-container">
             <h2 class="heading">Uutiset</h2>
@@ -39,6 +36,21 @@
             </ul>
         </section>
     </main>
+    <dialog id="login" class="login-menu">
+        <span>&#x2715;</span>
+        <form id="login-form" class="menu-form">
+            <input type="text" name="username" class="login-dialog" id="username-login" placeholder="username#123">
+            <input type="submit" value="Kirjaudu" class="menu">
+        </form>
+    </dialog>
+    <dialog id="create-account" class="login-menu">
+        <span>&#x2715;</span>
+        <form id="create-account-form" class="menu-form">
+            <input type="text" name="username" class="login-dialog" placeholder="username">
+            <input type="submit" value="Luo Käyttäjä" class="menu">
+        </form>
+        <span></span>
+    </dialog>
     <dialog id="game-menu">
 
     </dialog>
