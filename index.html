@@ -37,14 +37,15 @@
         </section>
     </main>
     <dialog id="login" class="login-menu">
-        <span>&#x2715;</span>
+        <span class="exit-button">&#x2715;</span>
         <form id="login-form" class="menu-form">
             <input type="text" name="username" class="login-dialog" id="username-login" placeholder="username#123">
             <input type="submit" value="Kirjaudu" class="menu">
         </form>
+        <span id="error-message"></span>
     </dialog>
     <dialog id="create-account" class="login-menu">
-        <span>&#x2715;</span>
+        <span class="exit-button">&#x2715;</span>
         <form id="create-account-form" class="menu-form">
             <input type="text" name="username" class="login-dialog" placeholder="username">
             <input type="submit" value="Luo Käyttäjä" class="menu">
