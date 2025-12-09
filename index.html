@@ -23,9 +23,9 @@
                 <!-- fetch javascript highscore-->
             </ul>
         </section>
-        <section id="login-form">
-            <div id="login" class="login-buttons">Kirjaudu Sisään</div>
-            <div id="create-account" class="login-buttons">Luo Käyttäjä</div>
+        <section id="login-menu">
+            <div id="login-btn" class="login-buttons">Kirjaudu Sisään</div>
+            <div id="create-account-btn" class="login-buttons">Luo Käyttäjä</div>
         </section>
         <section id="news-section" class="section-container">
             <h2 class="heading">Uutiset</h2>
@@ -36,6 +36,21 @@
             </ul>
         </section>
     </main>
+    <dialog id="login" class="login-menu">
+        <span>&#x2715;</span>
+        <form id="login-form" >
+            <input type="text" name="username" id="username-login" placeholder="username#123">
+            <input type="submit" value="Kirjaudu">
+        </form>
+    </dialog>
+    <dialog id="create-account" class="login-menu">
+        <span>&#x2715;</span>
+        <form id="create-account-form">
+            <input type="text" name="username" placeholder="username">
+            <input type="submit" value="Luo Käyttäjä">
+        </form>
+        <span></span>
+    </dialog>
     <dialog id="game-menu">
 
     </dialog>
