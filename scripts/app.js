@@ -198,6 +198,17 @@ function clearOldGames() {
   gameList.innerHTML = '';
 }
 
+function isLoggedIn() {
+  let username = localStorage.getItem('username');
+  let ID = localStorage.getItem('ID');
+
+  if (username && ID) {
+    fillOldGameList();
+    loginMenu.classList.add('hide-element');
+    gameMenuDialog.showModal();
+  }
+}
+
 loginButton.addEventListener('click', loginClick);
 createAccountButton.addEventListener('click', createAccountClick);
 
@@ -210,3 +221,5 @@ for (const exitButton of exitButtons) {
 
 logoutButton.addEventListener('click', logout);
 newGameButton.addEventListener('click', createNewGame);
+
+console.log('XDDDDD: ', isLoggedIn());
