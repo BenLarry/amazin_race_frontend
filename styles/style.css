@@ -332,8 +332,8 @@ li:hover {
 }
 
 #map {
-    height: 800px;
-    width: 800px;
+    height: 74%;
+    width: 42%;
     margin: 2rem 0 0 1rem;
     position: absolute;
     left: 1rem;
