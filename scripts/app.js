@@ -105,7 +105,9 @@ async function login(event) {
 
     await fillOldGameList();
     loginDialog.close();
-    welcomeText.innerText = `Hei, ${localStorage.getItem('username')}#${localStorage.getItem('ID')}`;
+    welcomeText.innerText = `Hei, ${localStorage.getItem(
+      'username'
+    )}#${localStorage.getItem('ID')}`;
 
     gameMenuDialog.showModal();
   } catch (error) {
@@ -348,7 +350,9 @@ async function fillOldGameList() {
   }
 }
 
-function isAnswerCorrect(question, answer) {}
+function isAnswerCorrect(question, answer) {
+  return 0;
+}
 
 function loginClick(event) {
   event.preventDefault();
