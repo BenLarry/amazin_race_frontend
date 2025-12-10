@@ -100,8 +100,7 @@ async function login(event) {
 
     await fillOldGameList();
     loginDialog.close();
-    welcomeText.innerText = `Hei, ${localStorage.getItem('username')}
-    #${localStorage.getItem('ID')}`;
+    welcomeText.innerText = `Hei, ${localStorage.getItem('username')}#${localStorage.getItem('ID')}`;
 
     gameMenuDialog.showModal();
   } catch (error) {
