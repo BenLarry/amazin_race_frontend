@@ -514,6 +514,62 @@ li:hover {
     opacity: 0.3;
 }
 
+#endscreen::backdrop {
+    display: none;
+}
+
+#endscreen {
+    margin-left: 40%;
+    margin-top: 15%;
+    width: 20%;
+    background: rgba(0, 0, 0, 0.7);
+    font-family: "Workbench", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+    "BLED" 7,
+    "SCAN" -15;
+    color: lightblue;
+}
+
+#game-end-text {
+    margin: 0.5rem;
+    text-align: center;
+}
+
+#game-end-stats {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.game-end-stat {
+    width: 100%;
+    padding: 1rem;
+}
+
+.continue {
+    width: 100%;
+    padding: 2rem;
+}
+
+.continue-btn {
+    text-align: center;
+    border: 3px solid grey;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.continue-btn {
+    text-align: center;
+    border: 3px solid grey;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.continue-btn:hover {
+    background: rgba(0, 0, 255, 0.3);
+}
 /*
 nav {
     width: 100%;

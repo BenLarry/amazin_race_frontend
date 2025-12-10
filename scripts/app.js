@@ -541,3 +541,10 @@ newGameButton.addEventListener('click', createNewGame);
 
 fillHighscoreList();
 isLoggedIn();
+
+function GameEndStats (event) {
+  event.preventDefault()
+  endscreenDialog.showModal()
+}
+
+endscreenDialog.showModal()
