@@ -28,6 +28,12 @@ const airportNameText = document.querySelector('#airport-name-text');
 const airportIcaoText = document.querySelector('#airport-icao-text');
 const CO2Text = document.querySelector('#airport-CO2-text');
 const flyButton = document.querySelector('.fly-button');
+const endscreenDialog = document.querySelector('#endscreen');
+
+const continueButton = document.querySelector('.continue-btn');
+const endGameCO2Text = document.querySelector('#game-end-CO2');
+const endGamePointsText = document.querySelector('#game-points');
+const endGamePointsTotalText = document.querySelector('#game-end-points');
 
 const oldGamesArray = [];
 const airportsArray = [];
@@ -273,16 +279,14 @@ async function updateCO2(price) {
     const response = await fetch(
       `http://127.0.0.1:3000/airport?game_ID=${localStorage.getItem(
         'game_ID'
-      )}&ident=${airportIcaoText.textContent}&player_ID=${localStorage.getItem(
-        'ID'
-      )}`,
+      )}&amount=${price}`,
       {
         method: 'POST',
       }
     );
 
     if (!response.ok) {
-      console.log('could not fly');
+      console.log('could not updateco2 consumed');
       return;
     }
   } catch (error) {
@@ -299,16 +303,11 @@ async function handleFly(event) {
   const newAirportData = await fetchGameAirports();
   airportsArray.push(newAirportData);
   await renderQuestion();
-  console.log(airportsArray);
+  const gameData = await fetchGame();
+  CO2.innerText = `CO2 päästöt: ${gameData.co2_consumed}`;
 
   layerGroup.clearLayers();
   await setMarker(newAirportData);
-  //ident where to fly, updtae co2, set visited
-  //MUUTA PELAAJAN LOKAATIO
-  //FETCHAA PELIN UUDET TIEDOT
-  //FETCHAA PELIN UUDET AIRPORT TIEDOT
-  //FETCHAA UUSI KYSYMYS
-  //TEE KYSYMYS CHECK PASKA
 }
 
 async function renderNewAirport(event) {
@@ -432,7 +431,7 @@ async function setQuestionAnswered() {
     if (!response.ok) {
       console.log('couldnt set answer answered');
     }
-    const result = response.json();
+    const result = await response.json();
     return result;
   } catch (error) {
     console.log(error);
@@ -505,10 +504,62 @@ function isLoggedIn() {
   }
 }
 
+async function fetchGame() {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/game?player_ID=${localStorage.getItem(
+        'ID'
+      )}&game_ID=${localStorage.getItem('game_ID')}`
+    );
+
+    if (!response.ok) {
+      console.log('couldnt set fetch game');
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function setGameOver() {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/game?player_ID=${localStorage.getItem(
+        'ID'
+      )}&game_ID=${localStorage.getItem('game_ID')}&is_over=1`,
+      {
+        method: 'POST',
+      }
+    );
+
+    if (!response.ok) {
+      console.log('couldnt set  game over');
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function endGame() {
-  //send game is over to backend
-  //show endgame statics
+  await setGameOver();
+  const endedGameData = await fetchGame();
+  console.log(endedGameData);
+  endGamePointsText.innerText = `Pisteet: ${endedGameData.points}`;
+  endGameCO2Text.innerText = `CO2 päästöt: ${endedGameData.co2_consumed}`;
+  endGamePointsTotalText.innerText = `Lopulliset pisteet: ${
+    endedGameData.points - endedGameData.co2_consumed * 0.1
+  }`;
+
+  endscreenDialog.showModal();
   game.close();
+}
+
+function handleContinueButton() {
+  endscreenDialog.close();
+  gameMenuDialog.showModal();
 }
 
 const map = L.map('map', { tap: false }).setView([60, 24], 7);
@@ -538,13 +589,7 @@ for (const logoutButton of logoutButtons) {
 answerForm.addEventListener('click', handleAnswer);
 
 newGameButton.addEventListener('click', createNewGame);
+continueButton.addEventListener('click', handleContinueButton);
 
 fillHighscoreList();
 isLoggedIn();
-
-function GameEndStats (event) {
-  event.preventDefault()
-  endscreenDialog.showModal()
-}
-
-endscreenDialog.showModal()
