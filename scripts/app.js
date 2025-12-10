@@ -19,7 +19,7 @@ const playerName = document.querySelector('#player-name');
 const playerPoints = document.querySelector('#points');
 const CO2 = document.querySelector('#CO2');
 const endAirport = document.querySelector('#end-airport');
-const welcomeText = document.querySelector('#welcome-text')
+const welcomeText = document.querySelector('#welcome-text');
 
 const oldGamesArray = [];
 
@@ -60,6 +60,7 @@ async function fetchGameAirports() {
     }
 
     const result = await response.json();
+    console.log(result);
     return result;
   } catch (error) {}
 }
@@ -186,11 +187,14 @@ async function fetchOldGames() {
 
 async function setMarker(airports) {
   for (const airport of airports) {
-    console.log(airport.latitude_deg, airport.longitude_deg);
-    /*L.marker([airport.latitude_deg, airport.lontitude_deg])
-      .addTo(map)
-      .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-      .openPopup();*/
+    console.log(airport);
+    L.marker([airport.latitude_deg, airport.longitude_deg])
+      .addTo(layerGroup)
+      // co2 päästö hinta
+      // lento kentän nimi
+      //
+      .bindPopup(airport.type)
+      .openPopup();
   }
 }
 
@@ -255,6 +259,7 @@ function logout(event) {
   oldGamesArray.length = 0;
   localStorage.clear();
   clearOldGames();
+  layerGroup.clearLayers();
   if (game.open) {
     game.close();
   }
@@ -263,6 +268,7 @@ function logout(event) {
     gameMenuDialog.close();
   }
 
+  welcomeText.innerHTML = '';
   loginMenu.classList.remove('hide-element');
 }
 
@@ -282,10 +288,26 @@ function isLoggedIn() {
 }
 
 const map = L.map('map', { tap: false }).setView([60, 24], 7);
-L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+/*L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
   maxZoom: 20,
   subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-}).addTo(map);
+}).addTo(map);*/
+
+/*L.tileLayer(
+  'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; Stadia Maps',
+  }
+).addTo(map);*/
+
+L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution: 'Tiles © Esri — National Geographic',
+  }
+).addTo(map);
+
+const layerGroup = L.layerGroup().addTo(map);
 
 loginButton.addEventListener('click', loginClick);
 createAccountButton.addEventListener('click', createAccountClick);
