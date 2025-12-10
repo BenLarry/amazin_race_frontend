@@ -24,6 +24,7 @@ const questionText = document.querySelector('#question-text');
 const answerForm = document.querySelector('#Answers');
 const answerButtons = Array.from(document.querySelectorAll('.answer'));
 const answerFeedback = document.querySelector('#answer-feedback');
+const endscreenDialog = document.querySelector('#endscreen')
 
 const oldGamesArray = [];
 
@@ -352,3 +353,10 @@ newGameButton.addEventListener('click', createNewGame);
 
 fillHighscoreList();
 isLoggedIn();
+
+function GameEndStats (event) {
+  event.preventDefault()
+  endscreenDialog.showModal()
+}
+
+endscreenDialog.showModal()
