@@ -20,6 +20,10 @@ const playerPoints = document.querySelector('#points');
 const CO2 = document.querySelector('#CO2');
 const endAirport = document.querySelector('#end-airport');
 const welcomeText = document.querySelector('#welcome-text');
+const questionText = document.querySelector('#question-text');
+const answerForm = document.querySelector('#Answers');
+const answerButtons = Array.from(document.querySelectorAll('.answer'));
+const answerFeedback = document.querySelector('#answer-feedback');
 
 const oldGamesArray = [];
 
@@ -60,7 +64,6 @@ async function fetchGameAirports() {
     }
 
     const result = await response.json();
-    console.log(result);
     return result;
   } catch (error) {}
 }
@@ -143,6 +146,25 @@ async function createAccount(event) {
   }
 }
 
+async function fetchQuestion() {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/question?game_ID=${localStorage.getItem(
+        'game_ID'
+      )}`
+    );
+
+    if (!response.ok) {
+      console.log('couldnt fetch question');
+    }
+    const result = await response.json();
+    console.log(result.question);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function createNewGame() {
   //if local strogra empty logout
   //GIVE ERROR MESSAGE
@@ -185,9 +207,10 @@ async function fetchOldGames() {
   }
 }
 
+/*tee valmiiksi*/
 async function setMarker(airports) {
   for (const airport of airports) {
-    console.log(airport);
+    //console.log(airport);
     L.marker([airport.latitude_deg, airport.longitude_deg])
       .addTo(layerGroup)
       // co2 päästö hinta
@@ -205,6 +228,12 @@ async function loadGame(gameData) {
   await setMarker(airports);
 
   console.log(gameData);
+  const question = await fetchQuestion();
+  questionText.innerText = question.question;
+  for (let i = 0; i < answerButtons.length; i++) {
+    answerButtons[i].value = `${question.answer[i].answer}`;
+  }
+
   playerName.innerText = `Pelaajan nimi: ${localStorage.getItem(
     'username'
   )}#${localStorage.getItem('ID')}`;
@@ -235,6 +264,8 @@ async function fillOldGameList() {
   }
 }
 
+function isAnswerCorrect(question, answer) {}
+
 function loginClick(event) {
   event.preventDefault();
   loginMenu.classList.add('hide-element');
@@ -247,6 +278,11 @@ function createAccountClick(event) {
   loginMenu.classList.add('hide-element');
   console.log('Create account button clicked');
   createAccountDialog.showModal();
+}
+
+function handleAnswer(event) {
+  event.preventDefault();
+  console.log(event.target.id);
 }
 
 function handleLoginMenu(event) {
@@ -288,18 +324,6 @@ function isLoggedIn() {
 }
 
 const map = L.map('map', { tap: false }).setView([60, 24], 7);
-/*L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-  maxZoom: 20,
-  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-}).addTo(map);*/
-
-/*L.tileLayer(
-  'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; Stadia Maps',
-  }
-).addTo(map);*/
-
 L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
   {
@@ -322,6 +346,8 @@ for (const exitButton of exitButtons) {
 for (const logoutButton of logoutButtons) {
   logoutButton.addEventListener('click', logout);
 }
+
+answerForm.addEventListener('click', handleAnswer);
 
 newGameButton.addEventListener('click', createNewGame);
 
