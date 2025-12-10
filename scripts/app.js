@@ -12,9 +12,15 @@ const gameMenuDialog = document.querySelector('#game-menu');
 const gameDialog = document.querySelector('#game');
 const loginMenu = document.querySelector('#login-menu');
 const exitButtons = Array.from(document.querySelectorAll('.exit-button'));
-const logoutButton = document.querySelector('.logout-btn');
+const logoutButtons = Array.from(document.querySelectorAll('.logout-btn'));
 const newGameButton = document.querySelector('#new-game');
 const gameList = document.querySelector('#game-list');
+const playerName = document.querySelector('#player-name');
+const playerPoints = document.querySelector('#points');
+const CO2 = document.querySelector('#CO2');
+const endAirport = document.querySelector('#end-airport');
+
+const oldGamesArray = [];
 
 async function fetchHighscoreList() {
   try {
@@ -117,6 +123,8 @@ async function createAccount(event) {
 
 async function createNewGame() {
   //if local strogra empty logout
+  //GIVE ERROR MESSAGE
+  console.log();
   try {
     const response = await fetch(
       `http://127.0.0.1:3000/game?player_ID=${localStorage.getItem('ID')}`,
@@ -131,7 +139,8 @@ async function createNewGame() {
     }
 
     const result = await response.json();
-    console.log(result);
+
+    return loadGame(result);
   } catch (error) {
     console.log(error);
   }
@@ -154,13 +163,35 @@ async function fetchOldGames() {
   }
 }
 
+function loadGame(gameData) {
+  //if game null cannot load game
+
+  console.log(gameData);
+  playerName.innerText = `Pelaajan nimi: ${localStorage.getItem(
+    'username'
+  )}#${localStorage.getItem('ID')}`;
+  playerPoints.innerText = `Pisteet: ${gameData.points}`;
+  CO2.innerText = `CO2 päästöt: ${gameData.co2_consumed}`;
+  endAirport.innerText = `Lopetus lentokenttä: ${gameData.end_airport}`;
+
+  gameMenuDialog.close();
+  game.showModal();
+}
+
+function handleOldGameClick(event) {
+  loadGame(oldGamesArray[event.target.id]);
+}
+
 async function fillOldGameList() {
   const oldGames = await fetchOldGames();
 
   for (let i = 0; i < oldGames.length; i++) {
+    oldGamesArray.push(oldGames[i]);
     const li = document.createElement('li');
     li.classList.add('list-item');
+    li.id = i;
     li.innerText = `${i + 1} Peli player ID ${localStorage.getItem('ID')}`;
+    li.addEventListener('click', handleOldGameClick);
     gameList.append(li);
   }
 }
@@ -186,9 +217,17 @@ function handleLoginMenu(event) {
 
 function logout(event) {
   console.log('clicked logout');
+  oldGamesArray.length = 0;
   localStorage.clear();
   clearOldGames();
-  gameMenuDialog.close();
+  if (game.open) {
+    game.close();
+  }
+
+  if (gameMenuDialog.open) {
+    gameMenuDialog.close();
+  }
+
   loginMenu.classList.remove('hide-element');
 }
 
@@ -224,7 +263,10 @@ for (const exitButton of exitButtons) {
   exitButton.addEventListener('click', handleLoginMenu);
 }
 
-logoutButton.addEventListener('click', logout);
+for (const logoutButton of logoutButtons) {
+  logoutButton.addEventListener('click', logout);
+}
+
 newGameButton.addEventListener('click', createNewGame);
 
 //gameDialog.showModal();
