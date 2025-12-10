@@ -107,7 +107,7 @@ body {
 }
 
 .login-buttons:hover {
-  background-color: rgb(54, 54, 54);
+  background: rgba(0, 0, 170, 0.5);
 }
 
 .login-menu[open] {
