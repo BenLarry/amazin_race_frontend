@@ -19,6 +19,7 @@ const playerName = document.querySelector('#player-name');
 const playerPoints = document.querySelector('#points');
 const CO2 = document.querySelector('#CO2');
 const endAirport = document.querySelector('#end-airport');
+const welcomeText = document.querySelector('#welcome-text')
 
 const oldGamesArray = [];
 
@@ -94,8 +95,10 @@ async function login(event) {
     localStorage.setItem('ID', result.ID);
 
     await fillOldGameList();
-
     loginDialog.close();
+    welcomeText.innerText = `Hei, ${localStorage.getItem('username')}
+    #${localStorage.getItem('ID')}`;
+
     gameMenuDialog.showModal();
   } catch (error) {
     console.log(error);
