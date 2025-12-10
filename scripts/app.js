@@ -24,9 +24,14 @@ const questionText = document.querySelector('#question-text');
 const answerForm = document.querySelector('#Answers');
 const answerButtons = Array.from(document.querySelectorAll('.answer'));
 const answerFeedback = document.querySelector('#answer-feedback');
-const endscreenDialog = document.querySelector('#endscreen')
+const airportNameText = document.querySelector('#airport-name-text');
+const airportIcaoText = document.querySelector('#airport-icao-text');
+const CO2Text = document.querySelector('#airport-CO2-text');
+const flyButton = document.querySelector('.fly-button');
 
 const oldGamesArray = [];
+const airportsArray = [];
+let question = '';
 
 async function fetchHighscoreList() {
   try {
@@ -101,7 +106,9 @@ async function login(event) {
 
     await fillOldGameList();
     loginDialog.close();
-    welcomeText.innerText = `Hei, ${localStorage.getItem('username')}#${localStorage.getItem('ID')}`;
+    welcomeText.innerText = `Hei, ${localStorage.getItem(
+      'username'
+    )}#${localStorage.getItem('ID')}`;
 
     gameMenuDialog.showModal();
   } catch (error) {
@@ -158,7 +165,6 @@ async function fetchQuestion() {
       console.log('couldnt fetch question');
     }
     const result = await response.json();
-    console.log(result.question);
     return result;
   } catch (error) {
     console.log(error);
@@ -166,9 +172,6 @@ async function fetchQuestion() {
 }
 
 async function createNewGame() {
-  //if local strogra empty logout
-  //GIVE ERROR MESSAGE
-  console.log();
   try {
     const response = await fetch(
       `http://127.0.0.1:3000/game?player_ID=${localStorage.getItem('ID')}`,
@@ -207,17 +210,130 @@ async function fetchOldGames() {
   }
 }
 
-/*tee valmiiksi*/
 async function setMarker(airports) {
   for (const airport of airports) {
-    //console.log(airport);
-    L.marker([airport.latitude_deg, airport.longitude_deg])
-      .addTo(layerGroup)
-      // co2 päästö hinta
-      // lento kentän nimi
-      //
-      .bindPopup(airport.type)
-      .openPopup();
+    if (airport.visited) {
+      const marker = L.marker([airport.latitude_deg, airport.longitude_deg], {
+        opacity: 0.4,
+      }).addTo(layerGroup);
+      marker.id = airport.id;
+      marker.addEventListener('click', renderNewAirport);
+    } else {
+      const marker = L.marker([
+        airport.latitude_deg,
+        airport.longitude_deg,
+      ]).addTo(layerGroup);
+      marker.id = airport.id;
+      marker.addEventListener('click', renderNewAirport);
+    }
+  }
+}
+
+async function fetchCO2Cost(ident) {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/airport/cost?game_ID=${localStorage.getItem(
+        'game_ID'
+      )}&ident=${ident}`
+    );
+    if (!response.ok) {
+      console.log('could not calculate cost');
+    }
+    const result = await response.json();
+    return result.price;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function movePlayer() {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/game?game_ID=${localStorage.getItem(
+        'game_ID'
+      )}&ident=${airportIcaoText.textContent}&player_ID=${localStorage.getItem(
+        'ID'
+      )}`,
+      {
+        method: 'POST',
+      }
+    );
+
+    if (!response.ok) {
+      console.log('could not fly');
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function updateCO2(price) {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/airport?game_ID=${localStorage.getItem(
+        'game_ID'
+      )}&ident=${airportIcaoText.textContent}&player_ID=${localStorage.getItem(
+        'ID'
+      )}`,
+      {
+        method: 'POST',
+      }
+    );
+
+    if (!response.ok) {
+      console.log('could not fly');
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function handleFly(event) {
+  answerFeedback.innerText = '';
+  const price = await fetchCO2Cost(airportIcaoText.textContent);
+  await updateCO2(price);
+  await movePlayer();
+  airportsArray.length = 0;
+  const newAirportData = await fetchGameAirports();
+  airportsArray.push(newAirportData);
+  await renderQuestion();
+  console.log(airportsArray);
+
+  layerGroup.clearLayers();
+  await setMarker(newAirportData);
+  //ident where to fly, updtae co2, set visited
+  //MUUTA PELAAJAN LOKAATIO
+  //FETCHAA PELIN UUDET TIEDOT
+  //FETCHAA PELIN UUDET AIRPORT TIEDOT
+  //FETCHAA UUSI KYSYMYS
+  //TEE KYSYMYS CHECK PASKA
+}
+
+async function renderNewAirport(event) {
+  for (const airport of airportsArray[0]) {
+    if (airport.id === event.target.id) {
+      const price = await fetchCO2Cost(airport.ident);
+      airportNameText.innerText = airport.type;
+      airportIcaoText.innerText = airport.ident;
+      CO2Text.innerText = price;
+      if (airport.visited) {
+        flyButton.classList.add('hide-element');
+        flyButton.removeEventListener('click', handleFly);
+      } else {
+        flyButton.classList.remove('hide-element');
+        flyButton.addEventListener('click', handleFly);
+      }
+    }
+  }
+}
+
+async function renderQuestion() {
+  question = await fetchQuestion();
+  questionText.innerText = question.question;
+  for (let i = 0; i < answerButtons.length; i++) {
+    answerButtons[i].value = `${question.answer[i].answer}`;
   }
 }
 
@@ -225,14 +341,9 @@ async function loadGame(gameData) {
   localStorage.setItem('game_ID', gameData.ID);
 
   const airports = await fetchGameAirports();
+  airportsArray.push(airports);
   await setMarker(airports);
-
-  console.log(gameData);
-  const question = await fetchQuestion();
-  questionText.innerText = question.question;
-  for (let i = 0; i < answerButtons.length; i++) {
-    answerButtons[i].value = `${question.answer[i].answer}`;
-  }
+  await renderQuestion();
 
   playerName.innerText = `Pelaajan nimi: ${localStorage.getItem(
     'username'
@@ -244,6 +355,7 @@ async function loadGame(gameData) {
   gameMenuDialog.close();
   game.showModal();
   map.invalidateSize();
+  console.log(layerGroup);
 }
 
 function handleOldGameClick(event) {
@@ -264,7 +376,12 @@ async function fillOldGameList() {
   }
 }
 
-function isAnswerCorrect(question, answer) {}
+function isAnswerCorrect(id) {
+  if (question.answer[id].is_correct) {
+    return true;
+  }
+  return false;
+}
 
 function loginClick(event) {
   event.preventDefault();
@@ -280,9 +397,73 @@ function createAccountClick(event) {
   createAccountDialog.showModal();
 }
 
-function handleAnswer(event) {
+async function setPlayerPoints(points) {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/game?player_ID=${localStorage.getItem(
+        'ID'
+      )}&game_ID=${localStorage.getItem('game_ID')}&amount=${points}`,
+      {
+        method: 'POST',
+      }
+    );
+
+    if (!response.ok) {
+      console.log('couldnt set player points');
+    }
+    const result = await response.json();
+    console.log(result);
+    playerPoints.innerText = `Pisteet: ${result.points}`;
+    return;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function setQuestionAnswered() {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/question?ID=${question.ID}`,
+      {
+        method: 'POST',
+      }
+    );
+
+    if (!response.ok) {
+      console.log('couldnt set answer answered');
+    }
+    const result = response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function handleAnswer(event) {
   event.preventDefault();
-  console.log(event.target.id);
+  if (question.answered) {
+    answerFeedback.innerText = 'olet vastannut kysymykseen';
+    return;
+  }
+  let answer = null;
+
+  if (event.target.id === 'answer-1') {
+    answer = isAnswerCorrect(0);
+  }
+  if (event.target.id === 'answer-2') {
+    answer = isAnswerCorrect(1);
+  }
+  if (event.target.id === 'answer-3') {
+    answer = isAnswerCorrect(2);
+  }
+
+  await setQuestionAnswered();
+  question.answered = 1;
+  if (answer) {
+    await setPlayerPoints(question.points);
+    return (answerFeedback.innerText = `Vastauksesi on oikein sait ${question.points} pistettä!`);
+  }
+  return (answerFeedback.innerText = `Vastauksesi on väärin!`);
 }
 
 function handleLoginMenu(event) {
@@ -293,6 +474,7 @@ function handleLoginMenu(event) {
 function logout(event) {
   console.log('clicked logout');
   oldGamesArray.length = 0;
+  airportsArray.length = 0;
   localStorage.clear();
   clearOldGames();
   layerGroup.clearLayers();
@@ -321,6 +503,12 @@ function isLoggedIn() {
     loginMenu.classList.add('hide-element');
     gameMenuDialog.showModal();
   }
+}
+
+async function endGame() {
+  //send game is over to backend
+  //show endgame statics
+  game.close();
 }
 
 const map = L.map('map', { tap: false }).setView([60, 24], 7);
