@@ -85,8 +85,7 @@ async function createAccount(event) {
   event.preventDefault();
   console.log('Create account submit clicked');
   const usernameInput = document.querySelector('#username-create-account');
-  if (!usernameInput.value) {
-    console.log('here');
+  if (!usernameInput.value || usernameInput.value.includes('#')) {
     return (errorMessageCreateAccount.innerText =
       'Please enter valid username');
   }
