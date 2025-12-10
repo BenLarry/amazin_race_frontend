@@ -47,6 +47,12 @@ async function fillHighscoreList() {
   }
 }
 
+async function fetchGameAirports() {
+  const response = fetch(
+    `http://127.0.0.1:3000/airport?game_ID=${localStorage.getItem()}`
+  );
+}
+
 async function login(event) {
   event.preventDefault();
   console.log('Login submit clicked');
@@ -108,8 +114,9 @@ async function createAccount(event) {
     }
 
     const result = await response.json();
+    console.log(result);
     localStorage.setItem('username', result.name);
-    localStorage.setItem('ID', result.ID);
+    localStorage.setItem('ID', result.id);
 
     await fillOldGameList();
 
@@ -163,8 +170,14 @@ async function fetchOldGames() {
   }
 }
 
-function loadGame(gameData) {
+async function loadGame(gameData) {
   //if game null cannot load game
+  //localStorage.setItem('game_ID', gameData.ID);
+  //console.log(localStorage.getItem('game_ID'));
+  //fetch airports and make layer on top of map then clicklable
+  console.log(gameData);
+
+  //const airports = await fetchGameAirports();
 
   console.log(gameData);
   playerName.innerText = `Pelaajan nimi: ${localStorage.getItem(
@@ -176,6 +189,7 @@ function loadGame(gameData) {
 
   gameMenuDialog.close();
   game.showModal();
+  map.invalidateSize();
 }
 
 function handleOldGameClick(event) {
@@ -246,12 +260,11 @@ function isLoggedIn() {
   }
 }
 
-const map = L.map('map', { tap: false });
+const map = L.map('map', { tap: false }).setView([60, 24], 7);
 L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
   maxZoom: 20,
   subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
 }).addTo(map);
-map.setView([60, 24], 7);
 
 loginButton.addEventListener('click', loginClick);
 createAccountButton.addEventListener('click', createAccountClick);
@@ -269,6 +282,5 @@ for (const logoutButton of logoutButtons) {
 
 newGameButton.addEventListener('click', createNewGame);
 
-//gameDialog.showModal();
 fillHighscoreList();
 isLoggedIn();
