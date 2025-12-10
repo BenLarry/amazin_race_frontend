@@ -30,7 +30,6 @@ async function fetchHighscoreList() {
       throw new Error('could not fetch highscore list');
     }
     const result = await response.json();
-    console.log(result);
     return result;
   } catch (error) {
     console.log(error);
@@ -49,9 +48,19 @@ async function fillHighscoreList() {
 }
 
 async function fetchGameAirports() {
-  const response = fetch(
-    `http://127.0.0.1:3000/airport?game_ID=${localStorage.getItem()}`
-  );
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:3000/airport?game_ID=${localStorage.getItem('game_ID')}`
+    );
+
+    if (!response.ok) {
+      console.log('could not fetch the airports');
+      return;
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {}
 }
 
 async function login(event) {
@@ -122,6 +131,7 @@ async function createAccount(event) {
     await fillOldGameList();
 
     createAccountDialog.close();
+
     gameMenuDialog.showModal();
   } catch (error) {
     console.log(error);
@@ -171,14 +181,21 @@ async function fetchOldGames() {
   }
 }
 
-async function loadGame(gameData) {
-  //if game null cannot load game
-  //localStorage.setItem('game_ID', gameData.ID);
-  //console.log(localStorage.getItem('game_ID'));
-  //fetch airports and make layer on top of map then clicklable
-  console.log(gameData);
+async function setMarker(airports) {
+  for (const airport of airports) {
+    console.log(airport.latitude_deg, airport.longitude_deg);
+    /*L.marker([airport.latitude_deg, airport.lontitude_deg])
+      .addTo(map)
+      .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+      .openPopup();*/
+  }
+}
 
-  //const airports = await fetchGameAirports();
+async function loadGame(gameData) {
+  localStorage.setItem('game_ID', gameData.ID);
+
+  const airports = await fetchGameAirports();
+  await setMarker(airports);
 
   console.log(gameData);
   playerName.innerText = `Pelaajan nimi: ${localStorage.getItem(
