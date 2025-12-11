@@ -34,6 +34,8 @@ const continueButton = document.querySelector('.continue-btn');
 const endGameCO2Text = document.querySelector('#game-end-CO2');
 const endGamePointsText = document.querySelector('#game-points');
 const endGamePointsTotalText = document.querySelector('#game-end-points');
+const endGameButton = document.querySelector('#end-game');
+const highscore = document.querySelector('#highscore-list');
 
 const oldGamesArray = [];
 const airportsArray = [];
@@ -54,7 +56,7 @@ async function fetchHighscoreList() {
 }
 
 async function fillHighscoreList() {
-  const highscore = document.querySelector('#highscore-list');
+  highscore.innerHTML = '';
   const players = await fetchHighscoreList();
   for (let i = 0; i < players.length; i++) {
     const li = document.createElement('li');
@@ -362,6 +364,7 @@ function handleOldGameClick(event) {
 }
 
 async function fillOldGameList() {
+  gameList.innerHTML = '';
   const oldGames = await fetchOldGames();
 
   for (let i = 0; i < oldGames.length; i++) {
@@ -546,7 +549,8 @@ async function setGameOver() {
 async function endGame() {
   await setGameOver();
   const endedGameData = await fetchGame();
-  console.log(endedGameData);
+  await fillOldGameList();
+  await fillHighscoreList();
   endGamePointsText.innerText = `Pisteet: ${endedGameData.points}`;
   endGameCO2Text.innerText = `CO2 päästöt: ${endedGameData.co2_consumed}`;
   endGamePointsTotalText.innerText = `Lopulliset pisteet: ${
@@ -590,6 +594,7 @@ answerForm.addEventListener('click', handleAnswer);
 
 newGameButton.addEventListener('click', createNewGame);
 continueButton.addEventListener('click', handleContinueButton);
+endGameButton.addEventListener('click', endGame);
 
 fillHighscoreList();
 isLoggedIn();
