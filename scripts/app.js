@@ -189,7 +189,7 @@ async function createNewGame() {
     );
 
     if (!response.ok) {
-      console.log('couldnt create game');
+      ('couldnt create game');
       return;
     }
 
@@ -332,6 +332,7 @@ async function renderNewAirport(event) {
 
 async function renderQuestion() {
   question = await fetchQuestion();
+  console.log(question);
   questionText.innerText = question.question;
   for (let i = 0; i < answerButtons.length; i++) {
     answerButtons[i].value = `${question.answer[i].answer}`;
@@ -413,8 +414,8 @@ async function setPlayerPoints(points) {
     if (!response.ok) {
       console.log('couldnt set player points');
     }
+
     const result = await response.json();
-    console.log(result);
     playerPoints.innerText = `Pisteet: ${result.points}`;
     return;
   } catch (error) {
@@ -423,9 +424,12 @@ async function setPlayerPoints(points) {
 }
 
 async function setQuestionAnswered() {
+  console.log(question.ID);
   try {
     const response = await fetch(
-      `http://127.0.0.1:3000/question?ID=${question.ID}`,
+      `http://127.0.0.1:3000/question?ID=${
+        question.ID
+      }&game_ID=${localStorage.getItem('game_ID')}`,
       {
         method: 'POST',
       }
